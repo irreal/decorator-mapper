@@ -6,12 +6,8 @@
 
 > Map json or pojo to typescript classes using decorators
 
-[![Build Status](https://travis-ci.org/irreal/decorator-mapper.svg?branch=master)](https://travis-ci.org/irreal/decorator-mapper)
 [![NPM version](https://img.shields.io/npm/v/@irreal/decorator-mapper.svg)](https://www.npmjs.com/package/@irreal/decorator-mapper)
 ![Downloads](https://img.shields.io/npm/dm/@irreal/decorator-mapper.svg)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 ---
 
@@ -23,7 +19,7 @@
 ## 🔧 Installation
 
 ```sh
-yarn add @irreal/decorator-mapper
+npm install @irreal/decorator-mapper --save
 ```
 
 ## 🎬 Getting started
