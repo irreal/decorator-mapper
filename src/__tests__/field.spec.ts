@@ -6,7 +6,7 @@ describe(`Field decorator`, () => {
   beforeEach(() => {
     global.Reflect = {
       defineMetadata: jest.fn(),
-      getMetadata: jest.fn()
+      getMetadata: jest.fn(),
     };
   });
 
@@ -33,14 +33,14 @@ describe(`Field decorator`, () => {
 
   it("calls into reflect getMetadata", () => {
     global.Reflect.getMetadata.mockReturnValue({ proporacle: "test" });
-    let resp = getField("tgt", "prop", "oracle");
+    const resp = getField("tgt", "prop", "oracle");
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), "tgt");
     expect(resp).toEqual("test");
   });
 
   it("returns undefined if prop not decorated", () => {
     global.Reflect.getMetadata.mockReturnValue(undefined);
-    let resp = getField("tgt", "prop", "oracle");
+    const resp = getField("tgt", "prop", "oracle");
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), "tgt");
     expect(resp).toEqual(undefined);
   });
@@ -54,7 +54,7 @@ describe(`Field decorator`, () => {
     );
 
     global.Reflect.getMetadata.mockReturnValue({ propdefault: "test name" });
-    let resp = getField("tgt", "prop");
+    const resp = getField("tgt", "prop");
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), "tgt");
     expect(resp).toEqual("test name");
   });
