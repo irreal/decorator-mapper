@@ -1136,16 +1136,43 @@ var Reflect$1;
     });
 })(Reflect$1 || (Reflect$1 = {}));
 
-// const fieldMetadataKey = Symbol('field-metadata-key')
+var FIELD_KEY = Symbol("field");
 function field(name, source) {
     if (source === void 0) { source = 'default'; }
-    return Reflect.metadata("dcmapper" + source, name);
+    return function (target, propertyKey) {
+        var classConstructor = target.constructor;
+        var metadata = Reflect.getMetadata(FIELD_KEY, classConstructor) || {};
+        metadata["" + propertyKey + source] = name;
+        Reflect.defineMetadata(FIELD_KEY, metadata, classConstructor);
+    };
 }
 function getField(target, propertyKey, source) {
     if (source === void 0) { source = 'default'; }
-    return Reflect.getMetadata("dcmapper" + source, target, propertyKey);
+    var allData = Reflect.getMetadata(FIELD_KEY, target) || {};
+    return allData["" + propertyKey + source];
+}
+
+var MAP_FROM_KEY = Symbol("mapFrom");
+var mapFrom = function (source) {
+    if (source === void 0) { source = 'default'; }
+    return function (target, propertyKey, descriptor) {
+        if (descriptor === undefined) {
+            descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+        }
+        var classConstructor = target.constructor;
+        var metadata = Reflect.getMetadata(MAP_FROM_KEY, classConstructor) || {};
+        metadata[source] = descriptor.value;
+        Reflect.defineMetadata(MAP_FROM_KEY, metadata, classConstructor);
+    };
+};
+function getMappedFromFunction(type, source) {
+    if (source === void 0) { source = "default"; }
+    var allMetadata = Reflect.getMetadata(MAP_FROM_KEY, type) || {};
+    return allMetadata[source];
 }
 
 exports.field = field;
 exports.getField = getField;
+exports.getMappedFromFunction = getMappedFromFunction;
+exports.mapFrom = mapFrom;
 //# sourceMappingURL=index.js.map

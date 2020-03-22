@@ -1,8 +1,14 @@
 import 'reflect-metadata'
 
-// const fieldMetadataKey = Symbol('field-metadata-key')
+const FIELD_KEY = Symbol("field");
+
 export function field(name: string, source = 'default') {
-  return Reflect.metadata(`dcmapper${source}`, name)
+  return (target: any, propertyKey: string) => {
+    var classConstructor = target.constructor;
+    const metadata = Reflect.getMetadata(FIELD_KEY, classConstructor) || {};
+    metadata[`${propertyKey}${source}`] = name;
+    Reflect.defineMetadata(FIELD_KEY, metadata, classConstructor);
+  };
 }
 
 export function getField(
@@ -10,9 +16,8 @@ export function getField(
   propertyKey: string,
   source = 'default'
 ): string {
-  return Reflect.getMetadata(
-    `dcmapper${source}`,
-    target,
-    propertyKey
-  );
+  let allData = Reflect.getMetadata(
+    FIELD_KEY,
+    target) || {};
+  return allData[`${propertyKey}${source}`];
 }
