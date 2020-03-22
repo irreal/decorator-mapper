@@ -8,75 +8,81 @@ describe(`Map Function decorator`, () => {
   beforeEach(() => {
     global.Reflect = {
       defineMetadata: jest.fn(),
-      getMetadata: jest.fn()
+      getMetadata: jest.fn(),
     };
   });
 
   it(`defines metadata`, () => {
-    mapFunction(MapDirection.FromJson, "test source")(TestClass, "prop", {
-      value: jest.fn()
-    });
+    mapFunction(MapDirection.FromJson, "test source")(
+      TestClass,
+      "mapMethod",
+      {}
+    );
 
     expect(Reflect.defineMetadata).toHaveBeenCalledWith(
       expect.anything(),
-      { "test sourceFromJson": expect.any(Function) },
+      { "test sourceFromJson": "mapMethod" },
       TestClass.constructor
     );
   });
 
   it(`does not override existing metadata`, () => {
-    global.Reflect.getMetadata.mockReturnValue({ drugisors: jest.fn() });
-    mapFunction(MapDirection.FromJson, "test source")(TestClass, "prop", {
-      value: jest.fn()
+    global.Reflect.getMetadata.mockReturnValue({
+      "existing sourceFromJson": "existingMethod",
     });
+    mapFunction(MapDirection.FromJson, "new source")(
+      TestClass,
+      "newMethod",
+      {}
+    );
 
     expect(Reflect.defineMetadata).toHaveBeenCalledWith(
       expect.anything(),
       {
-        "test sourceFromJson": expect.any(Function),
-        drugisors: expect.any(Function)
+        "new sourceFromJson": "newMethod",
+        "existing sourceFromJson": "existingMethod",
       },
       TestClass.constructor
     );
   });
 
   it("calls into reflect getMetadata", () => {
-    global.Reflect.getMetadata.mockReturnValue({ oracleFromJson: jest.fn() });
-    const resp = getMapFunction(TestClass, MapDirection.FromJson, "oracle");
+    global.Reflect.getMetadata.mockReturnValue({
+      "test sourceFromJson": "testMethod",
+    });
+    const resp = getMapFunction(
+      TestClass,
+      MapDirection.FromJson,
+      "test source"
+    );
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), TestClass);
-    expect(resp).toEqual(expect.any(Function));
+    expect(resp).toEqual("testMethod");
   });
 
   it("returns undefined if method not decorated", () => {
     global.Reflect.getMetadata.mockReturnValue(undefined);
-    const resp = getMapFunction(TestClass, MapDirection.FromJson, "oracle");
+    const resp = getMapFunction(
+      TestClass,
+      MapDirection.FromJson,
+      "test source"
+    );
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), TestClass);
     expect(resp).toEqual(undefined);
   });
 
   it("falls back to default source", () => {
-    mapFunction()(TestClass, "prop", { value: jest.fn() });
+    mapFunction()(TestClass, "testMethod", {});
     expect(Reflect.defineMetadata).toHaveBeenCalledWith(
       expect.anything(),
-      { defaultFromJson: expect.any(Function) },
+      { defaultFromJson: "testMethod" },
       TestClass.constructor
     );
 
-    global.Reflect.getMetadata.mockReturnValue({ defaultFromJson: jest.fn() });
+    global.Reflect.getMetadata.mockReturnValue({
+      defaultFromJson: "testMethod",
+    });
     const resp = getMapFunction(TestClass);
     expect(Reflect.getMetadata).toBeCalledWith(expect.anything(), TestClass);
-    expect(resp).toEqual(expect.any(Function));
-  });
-
-  it("gets property descriptor if not passed in", () => {
-    const fn = jest.fn();
-    fn.mockReturnValue({ value: jest.fn() });
-    Object.getOwnPropertyDescriptor = fn;
-    const ret = mapFunction() as any;
-    ret(TestClass, "prop");
-    expect(Object.getOwnPropertyDescriptor).toHaveBeenCalledWith(
-      TestClass,
-      "prop"
-    );
+    expect(resp).toEqual("testMethod");
   });
 });
