@@ -1153,7 +1153,12 @@ function getField(target, propertyKey, source) {
 }
 
 var MAP_FROM_KEY = Symbol("mapFrom");
-var mapFrom = function (source) {
+(function (MapDirection) {
+    MapDirection[MapDirection["FromJson"] = 0] = "FromJson";
+    MapDirection[MapDirection["ToJson"] = 1] = "ToJson";
+})(exports.MapDirection || (exports.MapDirection = {}));
+var mapFunction = function (mapDirection, source) {
+    if (mapDirection === void 0) { mapDirection = exports.MapDirection.FromJson; }
     if (source === void 0) { source = 'default'; }
     return function (target, propertyKey, descriptor) {
         if (descriptor === undefined) {
@@ -1161,18 +1166,19 @@ var mapFrom = function (source) {
         }
         var classConstructor = target.constructor;
         var metadata = Reflect.getMetadata(MAP_FROM_KEY, classConstructor) || {};
-        metadata[source] = descriptor.value;
+        metadata["" + source + exports.MapDirection[mapDirection]] = descriptor.value;
         Reflect.defineMetadata(MAP_FROM_KEY, metadata, classConstructor);
     };
 };
-function getMappedFromFunction(type, source) {
+function getMapFunction(type, mapDirection, source) {
+    if (mapDirection === void 0) { mapDirection = exports.MapDirection.FromJson; }
     if (source === void 0) { source = "default"; }
     var allMetadata = Reflect.getMetadata(MAP_FROM_KEY, type) || {};
-    return allMetadata[source];
+    return allMetadata["" + source + exports.MapDirection[mapDirection]];
 }
 
 exports.field = field;
 exports.getField = getField;
-exports.getMappedFromFunction = getMappedFromFunction;
-exports.mapFrom = mapFrom;
+exports.getMapFunction = getMapFunction;
+exports.mapFunction = mapFunction;
 //# sourceMappingURL=index.js.map

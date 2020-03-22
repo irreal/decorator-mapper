@@ -1,2 +1,2 @@
 export { field, getField } from './field'
-export { mapFrom, getMappedFromFunction } from './mapFrom'
+export { mapFunction, getMapFunction, MapDirection } from './mapFunction'
