@@ -9,13 +9,15 @@ class TestClass {
   id: number = 0;
   entryDate?: Date = undefined;
   propWithNoMap: string = "";
+  propToOverride: string = "";
   @mapFunction()
   customMapFunction(data: any, source: string) {
-    this.name = "overriden";
-    console.log('got called with', data, source);
-    // expect(data).toBeTruthy();
-    // expect(data.somethingElse).toEqual("else");
-    // expect(source).toEqual("default");
+    if (data.somethingElse) {
+      this.propToOverride = "overriden";
+      expect(data).toBeTruthy();
+      expect(data.somethingElse).toEqual("something else");
+      expect(source).toEqual("default");
+    }
   }
 }
 describe("mapper", () => {
@@ -23,6 +25,7 @@ describe("mapper", () => {
     it("returns empty default class with empty json", () => {
       const mapped = Mapper.mapTo<TestClass>(TestClass, {});
       expect(mapped).toBeTruthy();
+      expect(mapped).toEqual(new TestClass());
     });
 
     it("assigns values without maps", () => {
@@ -42,16 +45,23 @@ describe("mapper", () => {
     });
 
     it("assigns values with maps with custom sources", () => {
-      const mapped = Mapper.mapTo<TestClass>(TestClass, {
-        customSourceName: "a name"
-      }, 'custom source');
+      const mapped = Mapper.mapTo<TestClass>(
+        TestClass,
+        {
+          customSourceName: "a name"
+        },
+        "custom source"
+      );
       expect(mapped).toBeTruthy();
       expect(mapped.name).toEqual("a name");
     });
 
     it("calls custom mapping function if defined", () => {
-      const mapped = Mapper.mapTo<TestClass>(TestClass, { jsonName: "a name", somethingElse: "else" });
-      expect(mapped.name).toEqual("overriden");
+      const mapped = Mapper.mapTo<TestClass>(TestClass, {
+        jsonName: "a name",
+        somethingElse: "something else"
+      });
+      expect(mapped.propToOverride).toEqual("overriden");
     });
   });
 });

@@ -12,17 +12,11 @@ export const mapFunction = (
   return (
     target: any,
     propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
+    _: PropertyDescriptor
   ) => {
-    if (descriptor === undefined) {
-      descriptor = Object.getOwnPropertyDescriptor(
-        target,
-        propertyKey
-      ) as PropertyDescriptor;
-    }
     const classConstructor = target.constructor;
     const metadata = Reflect.getMetadata(MAP_FROM_KEY, classConstructor) || {};
-    metadata[`${source}${MapDirection[mapDirection]}`] = descriptor.value;
+    metadata[`${source}${MapDirection[mapDirection]}`] = propertyKey;
     Reflect.defineMetadata(MAP_FROM_KEY, metadata, classConstructor);
   };
 };

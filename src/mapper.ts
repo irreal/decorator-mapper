@@ -7,7 +7,7 @@ export class Mapper {
 
     Object.keys(instance).forEach(key => {
       const mappedName = getField(type, key, source);
-      if (mappedName) {
+      if (mappedName && data[mappedName]) {
         instance[key] = data[mappedName];
         return;
       }
@@ -15,7 +15,7 @@ export class Mapper {
     });
     let customMapFunction = getMapFunction(type, MapDirection.FromJson, source);
     if (customMapFunction) {
-      customMapFunction.apply([data, source], instance);
+      instance[customMapFunction](data, source);
     }
     return instance;
   }
