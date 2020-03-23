@@ -5,7 +5,7 @@ export class Mapper {
   static mapFromJson<T>(type: new () => T, data: any, source = "default"): T {
     const instance = new type();
 
-    Object.keys(instance).forEach((key) => {
+    Object.keys(instance).forEach(key => {
       const mappedName = getField(type, key, source);
       if (mappedName && data[mappedName]) {
         instance[key] = data[mappedName];
@@ -26,7 +26,7 @@ export class Mapper {
 
   static mapToJson(instance: object, source = "default"): any {
     const mapped = {};
-    Object.keys(instance).forEach((key) => {
+    Object.keys(instance).forEach(key => {
       const mappedName = getField(instance.constructor, key, source);
       if (mappedName) {
         mapped[mappedName] = instance[key];
