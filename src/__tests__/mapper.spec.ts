@@ -30,7 +30,7 @@ describe("mapper", () => {
 
     it("assigns values without maps", () => {
       const mapped = Mapper.mapTo<TestClass>(TestClass, {
-        propWithNoMap: "prop value"
+        propWithNoMap: "prop value",
       });
       expect(mapped).toBeTruthy();
       expect(mapped.propWithNoMap).toEqual("prop value");
@@ -38,7 +38,7 @@ describe("mapper", () => {
 
     it("assigns values with maps", () => {
       const mapped = Mapper.mapTo<TestClass>(TestClass, {
-        jsonName: "a name"
+        jsonName: "a name",
       });
       expect(mapped).toBeTruthy();
       expect(mapped.name).toEqual("a name");
@@ -48,7 +48,7 @@ describe("mapper", () => {
       const mapped = Mapper.mapTo<TestClass>(
         TestClass,
         {
-          customSourceName: "a name"
+          customSourceName: "a name",
         },
         "custom source"
       );
@@ -59,7 +59,7 @@ describe("mapper", () => {
     it("calls custom mapping function if defined", () => {
       const mapped = Mapper.mapTo<TestClass>(TestClass, {
         jsonName: "a name",
-        somethingElse: "something else"
+        somethingElse: "something else",
       });
       expect(mapped.propToOverride).toEqual("overriden");
     });

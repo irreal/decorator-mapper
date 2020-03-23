@@ -9,11 +9,7 @@ export const mapFunction = (
   mapDirection: MapDirection = MapDirection.FromJson,
   source = "default"
 ): MethodDecorator => {
-  return (
-    target: any,
-    propertyKey: string | symbol,
-    _: PropertyDescriptor
-  ) => {
+  return (target: any, propertyKey: string | symbol, _: PropertyDescriptor) => {
     const classConstructor = target.constructor;
     const metadata = Reflect.getMetadata(MAP_FROM_KEY, classConstructor) || {};
     metadata[`${source}${MapDirection[mapDirection]}`] = propertyKey;

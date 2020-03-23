@@ -5,7 +5,7 @@ export class Mapper {
   static mapTo<T>(type: new () => T, data: any, source = "default"): T {
     const instance = new type();
 
-    Object.keys(instance).forEach(key => {
+    Object.keys(instance).forEach((key) => {
       const mappedName = getField(type, key, source);
       if (mappedName && data[mappedName]) {
         instance[key] = data[mappedName];
@@ -13,7 +13,11 @@ export class Mapper {
       }
       if (data[key]) instance[key] = data[key];
     });
-    let customMapFunction = getMapFunction(type, MapDirection.FromJson, source);
+    const customMapFunction = getMapFunction(
+      type,
+      MapDirection.FromJson,
+      source
+    );
     if (customMapFunction) {
       instance[customMapFunction](data, source);
     }
