@@ -1,6 +1,6 @@
 {
   "name": "@irreal/decorator-mapper",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Convert javascript objects to typescript classes using decorators to map field names ",
   "main": "build/index.js",
   "module": "build/index.es.js",
