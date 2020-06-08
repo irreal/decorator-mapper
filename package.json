@@ -29,7 +29,7 @@
     "@types/jest": "^25.2.3",
     "jest": "^25.5.4",
     "prettier": "^2.0.5",
-    "rollup": "^2.12.1",
+    "rollup": "^2.15.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
@@ -38,7 +38,7 @@
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13"
